@@ -1,9 +1,6 @@
-[submodule "wp-content/plugins/wp-git-version-display"]
-	path = wp-content/plugins/wp-git-version-display
-	url = git@github.com:kraenhansen/wp-git-version-display.git
 [submodule "wp-content/plugins/git-revision-widget"]
 	path = wp-content/plugins/git-revision-widget
-	url = git@github.com:kraenhansen/git-revision-widget.git
+	url = https://github.com/kraenhansen/git-revision-widget.git
 [submodule "wp-content/plugins/wpchaosclient"]
 	path = wp-content/plugins/wpchaosclient
 	url = git@github.com:DR-Innovation/wpchaosclient.git
