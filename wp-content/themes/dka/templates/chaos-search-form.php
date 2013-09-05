@@ -7,14 +7,20 @@ $facets = array(
 	WPDKASearch::QUERY_KEY_TYPE => WPChaosSearch::generate_facet("FormatTypeName", WPDKASearch::QUERY_KEY_TYPE),
 	WPDKASearch::QUERY_KEY_ORGANIZATION => WPChaosSearch::generate_facet("DKA-Organization", WPDKASearch::QUERY_KEY_ORGANIZATION),
 );
-function get_facet_count($field, $value) {
+function get_facet_count($field, $values) {
+	if(is_string($values)) {
+		$values = array($values);
+	}
 	global $facets;
+	$sum = 0;
 	if(array_key_exists($field, $facets)) {
-		if(array_key_exists($value, $facets[$field])) {
-			return $facets[$field][$value];
+		foreach($values as $value) {
+			if(array_key_exists($value, $facets[$field])) {
+				$sum += intval($facets[$field][$value]);
+			}
 		}
 	}
-	return "0";
+	return $sum;
 }
 $advanced_search_expanded = ((!empty($types) || !empty($organizations)) ? " in" : "");
 ?>
@@ -53,17 +59,13 @@ $advanced_search_expanded = ((!empty($types) || !empty($organizations)) ? " in" 
 			<hr class="hidden-sm">
 <?php
 $current_organization_id = 0;
-foreach(WPDKASearch::get_organizations() as $title => $organization) :
-
-	if($current_organization_id == $organization['id']) {
-		continue;
-	}
-	$current_organization_id = $organization['id'];
+foreach(WPDKASearch::get_organizations_merged() as $id => $organization) :
+	$count = get_facet_count(WPDKASearch::QUERY_KEY_ORGANIZATION, $organization['chaos_titles']);
 
 ?>
 			<label for="<?php echo WPDKASearch::QUERY_KEY_ORGANIZATION .'-'. $organization['slug']; ?>" class="btn filter-btn filter-btn-single">
 				<input type="checkbox" class="chaos-filter" style="display: none;" name="<?php echo WPDKASearch::QUERY_KEY_ORGANIZATION; ?>[]" value="<?php echo $organization['slug']; ?>" id="<?php echo WPDKASearch::QUERY_KEY_ORGANIZATION .'-'. $organization['slug']; ?>" <?php checked(in_array($organization['slug'],(array)$organizations)); ?>>
-				<?php echo $organization['title']; ?> (<?php echo get_facet_count(WPDKASearch::QUERY_KEY_ORGANIZATION, $title) ?>)<i class="icon-remove-sign"></i>
+				<?php echo $organization['title']; ?> (<?php echo $count ?>)<i class="icon-remove-sign"></i>
 			</label> 
 <?php endforeach; ?>
 		</div>
