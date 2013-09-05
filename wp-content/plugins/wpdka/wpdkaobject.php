@@ -325,12 +325,14 @@ class WPDKAObject {
 			}
 			// Try another image - any image will do.
 			// TODO: Consider using a serverside cache and downscaling service.
+			/*
 			foreach($object->Files as $file) {
 				// FormatID = 10 is thumbnail format. This is what we want here
 				if($file->FormatType == "Image") {
 					return $value . htmlspecialchars($file->URL);
 				}
 			}
+			*/
 			// Fallback to nothing
 			return null;
 		}, 10, 2);

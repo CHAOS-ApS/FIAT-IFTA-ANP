@@ -224,6 +224,20 @@ class WPDKASearch {
 		}
 		return self::$organizations;
 	}
+	
+	public static function get_organizations_merged() {
+		$result = array();
+		$organizations = self::get_organizations();
+		foreach($organizations as $title => $organization) {
+			if(!array_key_exists($organization['id'], $result)) {
+				$result[$organization['id']] = $organization;
+				$result[$organization['id']]['chaos_titles'] = array($title);
+			} else {
+				$result[$organization['id']]['chaos_titles'][] = $title;
+			}
+		}
+		return $result;
+	}
 
 }
 
